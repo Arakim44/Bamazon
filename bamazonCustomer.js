@@ -12,22 +12,60 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
   if(err) throw err;
   displayItems();
-  ask();
+  chooseID();
 });
 
 
 // display all of the items available for sale. Include the ids, names, and prices of products for sale.
 var displayItems = function(){
-  connection.query("SELECT * FROM products", function(err,res){
+  connection.query("SELECT item_id, product_name, price FROM products", function(err,res){
     if(err) throw err;
     // console.log(res);
     for (var i = 0; i < res.length; i++){
-      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price +"\n===================================");
+      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price +"\n=====================================================");
     }
-
   });
 }
 
-var ask = function(){
-  
+
+
+// The first should ask them the ID of the product they would like to buy.
+var chooseID = function(){
+  inquirer.prompt([
+    {
+      name: "ID",
+      type: "input",
+      message: "Please enter the ID number you want to purchase: ",
+      validate: function(value){
+        if (isNaN(value) === false) {
+          return true;
+        }
+        console.log("Please Enter the number");
+        return false;
+        }
+    },{
+      //The second message should ask how many units of the product they would like to buy.
+      name: "quantity",
+      type: "input",
+      message: "Please Enter how many units of the product you would like to buy: ",
+      validate: function(value){
+        if (isNaN(value) === false) {
+          return true;
+        }
+        console.log("Please Enter the number");
+        return false;
+      }
+    }
+  ]).then(function(answer){
+     check(answer.ID, answer.quantity);
+  })
+
+}
+
+//Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
+// If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
+var check = function(itemID,quantity){
+  connection.query("SELECT * FROM products WHERE item_id=?",[itemID],function(err,res){
+   console.log(res);
+  })
 }

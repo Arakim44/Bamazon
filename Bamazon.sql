@@ -11,7 +11,7 @@ CREATE TABLE products(
         PRIMARY KEY(item_id)
 );
 
-INSERT INTO products(product_name, department_name, price, stock_quantity);
+INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ('Entryway Storage Rack / Bench Seat','furniture',88.00,130),
 	   ('Alen BreatheSmart FIT50 Customizable Air Purifier with HEPA-Pure for Allergies and Dust(Espresso, 1-pack)','Heating, Cooling & Air Quality',538.99,6),
        ('Long Sleeve Stretchy Top Solid Color Fashion T Shirt','Clothing', 15.99,350),

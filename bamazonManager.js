@@ -47,6 +47,14 @@ var menu = function(){
 
 function viewProduct(){
   console.log("view products");
+  connection.query("SELECT item_id, product_name, price FROM products", function(err,res){
+    if(err) throw err;
+    // console.log(res);
+    for (var i = 0; i < res.length; i++){
+      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price +"\n=====================================================");
+    }
+  });
+
 }
 function viewLow(){
   console.log("view low inventory");

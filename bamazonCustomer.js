@@ -66,6 +66,28 @@ var chooseID = function(){
 // If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
 var check = function(itemID,quantity){
   connection.query("SELECT * FROM products WHERE item_id=?",[itemID],function(err,res){
-   console.log(res);
+  // console.log(res);
+  // console.log(res[0].stock_quantity);
+  var itemSelected = res[0]
+  var inStock = itemSelected.stock_quantity;
+  var newStock = inStock - quantity;
+   if (newStock >= 0 ){
+     connection.query("UPDATE products SET ?  WHERE ?",
+     [{
+       stock_quantity: newStock
+     },{
+        item_id: itemID
+     }],
+     function(err, res){
+       console.log("Purchase placed");
+       var totalCost = quantity*itemSelected.price;
+       console.log("Your total cost is $"+totalCost);
+       console.log(newStock+ " left in stock");
+     });
+   }
+   else {
+     console.log("We are out of stock, or you entered insufficient quantity. please edit your order.");
+     chooseID();
+   }
   })
 }

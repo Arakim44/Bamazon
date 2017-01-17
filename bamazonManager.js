@@ -45,23 +45,41 @@ var menu = function(){
     })
 }
 
+
+
 function viewProduct(){
   console.log("view products");
-  connection.query("SELECT item_id, product_name, price FROM products", function(err,res){
+  connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function(err,res){
     if(err) throw err;
     // console.log(res);
     for (var i = 0; i < res.length; i++){
-      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price +"\n=====================================================");
+      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price + "\nIn Stock: "+ res[i].stock_quantity +"\n=====================================================");
     }
   });
 
 }
+
+
 function viewLow(){
   console.log("view low inventory");
+  connection.query("Select * FROM products WHERE stock_quantity < 100", function(err, res){
+    if (err) throw err;
+    // console.log(res);
+    // console.log(res[2].stock_quantity);
+    for (var i = 0; i < res.length; i++){
+      console.log("Item ID: " +res[i].item_id + "\nProduct name: "+res[i].product_name + " \nPrice: "+ res[i].price + "\nIn Stock: "+ res[i].stock_quantity +"\n=====================================================");
+    }
+  })
 }
+
+
+
 function addInventory(){
   console.log("add inventory");
 }
+
+
+
 function addNewProduct(){
   console.log("add new product");
 }

@@ -101,9 +101,10 @@ function addInventory(){
     }
   ]).then(function(answer){
     connection.query("SELECT * FROM products WHERE item_id=?",[answer.itemID],function(err,res){
-      console.log(res);
+      // console.log("You have selected item: "+ res[]);
       var selectedItem = res;
       var newQuantity = selectedItem[0].stock_quantity + parseInt(answer.quantity);
+      // console.log("You have selected item: "+ selectedItem[0].product_name);
 
     connection.query("UPDATE ptoducts SET ? WHERE ?",
     [{
@@ -113,7 +114,7 @@ function addInventory(){
     }],
     function(err,res){
       console.log("Inventory updated");
-      console.log("New Quantity: "+ newQuantity);
+      console.log("New Quantity of "+selectedItem[0].product_name+": "+ newQuantity);
     });
   });
   })
@@ -123,5 +124,44 @@ function addInventory(){
 
 
 function addNewProduct(){
-  console.log("add new product");
+  // console.log("add new product");
+  inquirer.prompt([
+    {
+      name: "newItem",
+      type: "input",
+      message: "Type the name of the new item you would like to add."
+    }, {
+      name: "department",
+      type: "input",
+      message: "Type the department that items belong to",
+    }, {
+      name: "price",
+      type: "input",
+      message: "What is the price of item?",
+      validate: function(value) {
+        if (isNaN(value) === false){
+          return true;
+        }
+        return false;
+      }
+    }, {
+      name: "quantity",
+      type: "input",
+      message: "How many items are you adding?",
+      validate: function(value){
+        if (isNaN(value) === false){
+          return true;
+        }
+        return false;
+      }
+    }]).then(function(answer){
+      connection.query("INSERT INTO products SET ?", {
+        product_name: answer.newItem,
+        department_name: answer.department,
+        price: answer.price,
+        stock_quantity: answer.quantity
+      }, function(err,res){
+        console.log("Item updated. check work bench!");
+      });
+    });
 }
